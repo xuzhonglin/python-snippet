@@ -5,10 +5,11 @@
 @Time     : 2021/8/19 19:08
 @Author   : colinxu
 @File     : movie.py
-@Desc     : 电影
+@Desc     : mjxq 电影
 """
 import requests
 import json
+import api as API
 
 requests.packages.urllib3.disable_warnings()
 
@@ -35,29 +36,63 @@ class Movie:
     def __init__(self):
         pass
 
-    def search(self, name):
-        search_url = BASE_URL + '/filter/hint'
-        header = HEADER
-        header['Content-Type'] = 'application/json; charset=utf-8'
+    def search(self, name: str):
+        """
+        搜索影片
+        :param name: 关键字
+        :return: list 结果列表
+        """
         payload = {
             'name': name
         }
-        resp = requests.post(search_url, json.dumps(payload), headers=header, verify=False)
-        print(resp.text)
+        resp = self._post(API.MOVIE_SEARCH, payload)
+        # print(resp.text)
         resp = resp.json()
         return resp['data']
 
-    def info(self, movie_id):
-        pass
+    def info(self, movie_id: int):
+        """
+        获取影片详情
+        :param movie_id: 影片的id
+        :return:
+        """
+        payload = {
+            "movie_id": movie_id
+        }
+        resp = self._post(API.MOVIE_INFO, payload)
+        # print(resp.text)
+        resp = resp.json()
+        return resp['data']
 
-    def play(self, movie_id):
-        pass
+    def play(self, episode):
+        payload = {
+            'episode': episode['episode'],
+            'id': episode['movie_id']
+        }
+        resp = self._post(API.MOVIE_PLAY, payload)
+        # print(resp.text)
+        resp = resp.json()
+        return resp['data']
 
-    def _get_play_url(self, id):
-        pass
+    def _get(self, url):
+        url = BASE_URL + url
+        header = HEADER
+        return requests.get(url, headers=header, verify=False)
+
+    def _post(self, url, data):
+        url = BASE_URL + url
+        header = HEADER
+        header['Content-Type'] = 'application/json; charset=utf-8'
+        return requests.post(url, json.dumps(data), headers=header, verify=False)
 
 
 if __name__ == '__main__':
     movie = Movie()
     a = movie.search('肖申克')
     print(a)
+
+    b = movie.info(a[0]['id'])
+    print(b)
+
+    c = movie.play(b['episode'][0])
+    print(c)
