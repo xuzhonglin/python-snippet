@@ -49,39 +49,63 @@ header = {
 # resp = requests.get(url, headers=header)
 # print(resp.text)
 
-# 推荐
-recommend_url = 'https://kjxq.api.wlnps.com/home/recommend/v2'
-resp = requests.get(recommend_url, headers=header, verify=False)
+# # 推荐
+# recommend_url = 'https://kjxq.api.wlnps.com/home/recommend/v2'
+# resp = requests.get(recommend_url, headers=header, verify=False)
+# print(resp.text)
+#
+# # 搜索
+# search_url = 'https://kjxq.api.wlnps.com/filter/hint'
+# header['Content-Type'] = 'application/json; charset=utf-8'
+# payload = {
+#     'name': '神盾局'
+# }
+# resp = requests.post(search_url, json.dumps(payload), headers=header, verify=False)
+# print(resp.text)
+#
+# # 列表
+# list_url = 'https://kjxq.api.wlnps.com/ranks/list/v2'
+# header['Content-Type'] = 'application/json; charset=utf-8'
+# payload = {"type": -2, "page": 1, "size": 5}
+# resp = requests.post(list_url, json.dumps(payload), headers=header, verify=False)
+# print(resp.text)
+#
+# # 影片信息
+# movie_info_url = 'https://kjxq.api.wlnps.com/movie/info'
+# header['Content-Type'] = 'application/json; charset=utf-8'
+# payload = {
+#     "movie_id": 5214
+# }
+# resp = requests.post(movie_info_url, data=json.dumps(payload), headers=header, verify=False)
+# print(resp.text)
+#
+# # 播放地址
+# play_path = 'https://kjxq.api.wlnps.com/movie/path'
+# header['Content-Type'] = 'application/json; charset=utf-8'
+# payload = {"episode": 1, "id": 5214}
+# resp = requests.post(play_path, data=json.dumps(payload), headers=header, verify=False)
+# print(resp.text)
+
+# 类别
+category_url = 'https://kjxq.api.wlnps.com/types/platform'
+resp = requests.get(category_url, headers=header, verify=False)
 print(resp.text)
 
-# 搜索
-search_url = 'https://kjxq.api.wlnps.com/filter/hint'
+# 筛选条件
+filter_category_url = 'https://kjxq.api.wlnps.com/types/screen'
+resp = requests.get(filter_category_url, headers=header, verify=False)
+print(resp.text)
+
+# 筛选电影
+filter_category_url = 'https://kjxq.api.wlnps.com/filter/movies'
 header['Content-Type'] = 'application/json; charset=utf-8'
 payload = {
-    'name': '神盾局'
+    "complete_type": 0,
+    "platform_type": 0,
+    "movies_type": 0,
+    "page": 1,
+    "year": 0,
+    "sort_type": 1
 }
-resp = requests.post(search_url, json.dumps(payload), headers=header, verify=False)
-print(resp.text)
-
-# 列表
-list_url = 'https://kjxq.api.wlnps.com/ranks/list/v2'
-header['Content-Type'] = 'application/json; charset=utf-8'
-payload = {"type": -2, "page": 1, "size": 5}
-resp = requests.post(list_url, json.dumps(payload), headers=header, verify=False)
-print(resp.text)
-
-# 影片信息
-movie_info_url = 'https://kjxq.api.wlnps.com/movie/info'
-header['Content-Type'] = 'application/json; charset=utf-8'
-payload = {
-    "movie_id": 5214
-}
-resp = requests.post(movie_info_url, data=json.dumps(payload), headers=header, verify=False)
-print(resp.text)
-
-# 播放地址
-play_path = 'https://kjxq.api.wlnps.com/movie/path'
-header['Content-Type'] = 'application/json; charset=utf-8'
-payload = {"episode": 1, "id": 5214}
-resp = requests.post(play_path, data=json.dumps(payload), headers=header, verify=False)
+resp = requests.post(filter_category_url, json.dumps(payload), headers=header, verify=False)
 print(resp.text)
