@@ -79,12 +79,12 @@ header = {
 # resp = requests.post(movie_info_url, data=json.dumps(payload), headers=header, verify=False)
 # print(resp.text)
 #
-# # 播放地址
-# play_path = 'https://kjxq.api.wlnps.com/movie/path'
-# header['Content-Type'] = 'application/json; charset=utf-8'
-# payload = {"episode": 1, "id": 5214}
-# resp = requests.post(play_path, data=json.dumps(payload), headers=header, verify=False)
-# print(resp.text)
+# 播放地址
+play_path = 'https://kjxq.api.wlnps.com/movie/path'
+header['Content-Type'] = 'application/json; charset=utf-8'
+payload = {"episode": 1, "id": 5214}
+resp = requests.post(play_path, data=json.dumps(payload), headers=header, verify=False)
+print(resp.text)
 
 # 类别
 category_url = 'https://kjxq.api.wlnps.com/types/platform'

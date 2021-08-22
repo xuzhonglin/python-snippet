@@ -13,7 +13,7 @@ import api as API
 
 requests.packages.urllib3.disable_warnings()
 
-LOG_ENABLE = False
+LOG_ENABLE = True
 
 BASE_URL = 'https://kjxq.api.wlnps.com'
 HEADER = {

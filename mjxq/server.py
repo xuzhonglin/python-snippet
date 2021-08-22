@@ -7,10 +7,13 @@
 @File     : server.py
 @Desc     : mjxq 接口服务
 """
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from movie import Movie
+import requests
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 MOVIE = Movie()
 PREFIX = ''
@@ -81,11 +84,36 @@ def get_play_url():
     if episode is None:
         return _response(msg='episode is null')
     play_url = MOVIE.play(episode)
+    # if play_url is not None and not _is_blank(play_url['play_path']):
+    #     play_url['play_path'] = request.host_url + 'm3u8?source=' + play_url['play_path']
     return _response(play_url)
 
 
-def _is_blank(s: str):
-    return s is None or len(s) == 0
+@app.route(PREFIX + '/m3u8', methods=['GET', 'POST'])
+def m3u8():
+    url = _parse_params('source')
+    e = _parse_params('e')
+    token = _parse_params('token')
+    final_url = '{}&e={}&token={}'.format(url, e, token)
+    resp = requests.get(final_url)
+    header = {}
+    for item in resp.headers:
+        header[item] = resp.headers.get(item)
+    # print(resp.text)
+    resp = resp.text.replace('http://', 'https://')
+    return resp, 200, header
+
+
+@app.route('/lib/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
+
+
+def _is_blank(s):
+    if type(s) == int:
+        return s is None
+    elif type(s) == str:
+        return s is None or len(s) == 0
 
 
 def _response(data=None, msg: str = 'success', code: int = 200):
